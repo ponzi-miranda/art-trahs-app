@@ -11,7 +11,7 @@ export default function UsersForm(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         const res = await fetch('https://art-trash.herokuapp.com/login', {
-            method:'POST',
+            method:'GET',
             body: JSON.stringify(user),
             headers:{"Content-Type": "application/json"},
         });
@@ -36,7 +36,7 @@ export default function UsersForm(){
                     padding:"1rem"
                 }}>
                     <Typography variant='5' textAlign='center' color='whitesmoke'>
-                            Registrar Marca
+                            Iniciar Sesión
                     </Typography>
                     <CardContent>
                         <form onSubmit={handleSubmit}> 

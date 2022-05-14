@@ -11,12 +11,18 @@ export default function UsersForm(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         const res = await fetch('https://art-trash.herokuapp.com/login', {
-            method:'GET',
+            method:'POST',
             body: JSON.stringify(user),
             headers:{"Content-Type": "application/json"},
         });
+
         const data = await res.json();
-        console.log(data);
+        
+        sessionStorage.setItem('brand_id', data);
+
+        if(sessionStorage.getItem('brand_id') != 'Error'){
+            window.location.href='/BrandMenu';
+        }
     };
 
     const handleChange = (e) =>
@@ -33,7 +39,7 @@ export default function UsersForm(){
                 <Card
                     sx={{mt : 5}} style={{
                     backgroundColor:'gray',
-                    padding:"1rem"
+                    padding:"5rem"
                 }}>
                     <Typography variant='5' textAlign='center' color='whitesmoke'>
                             Iniciar Sesión

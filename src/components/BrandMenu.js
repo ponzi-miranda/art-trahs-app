@@ -1,7 +1,7 @@
 import {Button, Card, CardContent, Grid, TextField, Typography, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
 import {useState, useEffect} from "react"
 
-export default function StockForm(){
+export default function BrandMenu(){
     
     const[products, setProducts]= useState([])
     const loadProducts = async (e) =>{
@@ -46,42 +46,33 @@ export default function StockForm(){
                     <Card
                         sx={{mt : 5}} style={{
                         backgroundColor:'gray',
-                        padding:"1rem"
+                        padding:"12rem"
                     }}>
-                        <Typography variant='5' textAlign='center' color='whitesmoke'>
-                                Cargar Stock
-                        </Typography>
                         <CardContent>
                             <form onSubmit={handleSubmit}> 
-                                <InputLabel >Productos</InputLabel>
-                                <Select
-                                    variant="outlined"
-                                    label="Productos"
-                                    name="product_id"
-                                    inputProps={{style: {color: "white"}}}
-                                    InputLabelProps={{style: {color: "white"}}}
-                                    onChange={handleChange}
-                                    fullWidth
-                                >
-                        {products.map(product =>(
-                                    
-                                <MenuItem value={product.id}>{product.description}</MenuItem>
-                        ))}
-                                </Select>
-                                <TextField
-                                    variant="outlined"
-                                    label="Cantidad:"
-                                    sx={{
+                                <Button variant="outlined" size="large"  color="inherit" type="submit"  sx={{
                                         display:'block',
-                                        margin:'.5rem 0'
+                                        margin:'.5rem 0',
                                     }}
-                                    name="quantity"
-                                    onChange={handleChange}
-                                    inputProps={{style: {color: "white"}}}
-                                    InputLabelProps={{style: {color: "white"}}}
-                                />
-                                <Button variant="outlined" color="inherit" type="submit">
-                                    Cargar Stock
+                                    onClick={event =>  window.location.href='/Product'}>
+                                  ALTA PRODUCTOS  
+                                </Button>
+
+                                <Button variant="outlined" size="large"  color="inherit" type="submit"  sx={{
+                                        display:'block',
+                                        margin:'.5rem 0',
+                                        
+                                    }}
+                                    onClick={event =>  window.location.href='/StockList'}>
+                                    LISTADO DE STOCK
+                                </Button>
+
+                                <Button variant="outlined" size="large" color="inherit" type="submit"  sx={{
+                                        display:'block',
+                                        margin:'.5rem 0',
+                                    }}
+                                    onClick={event =>  window.location.href='/SalesList'}>
+                                    LISTADO DE VENTAS
                                 </Button>
                             </form>
                         </CardContent>

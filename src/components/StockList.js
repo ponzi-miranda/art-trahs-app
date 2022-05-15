@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
+import {Button} from "@mui/material";
 
 const muiCache = createCache({
   key: "mui-datatables",
@@ -14,6 +15,7 @@ const muiCache = createCache({
 export default function StockList(){
 
     const[stock, setStock] = useState([])
+  
 
     const loadStock = async () => {
         const response = await fetch('https://art-trash.herokuapp.com/stock/brand/' + sessionStorage.getItem('brand_id'))
@@ -71,9 +73,9 @@ export default function StockList(){
           empty: true,
           customBodyRenderLite: (dataIndex, rowIndex) => {
             return (
-              <button onClick={() => window.location.replace("http://localhost:3000/EditProduct/" + stock[dataIndex].product_id)}>
+              <Button variant="contained" color="inherit" onClick={() => window.location.replace(`http://localhost:3000/product/${stock[dataIndex].product_id}/edit`)}>
                 ✏️
-              </button>
+              </Button>
             );
           }
         }

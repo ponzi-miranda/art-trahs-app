@@ -54,7 +54,7 @@ export default function BrandMenu(){
                                         display:'block',
                                         margin:'.5rem 0',
                                     }}
-                                    onClick={event =>  window.location.href='/Product'}>
+                                    onClick={event =>  window.location.href='/product'}>
                                   ALTA PRODUCTOS  
                                 </Button>
 
@@ -63,7 +63,7 @@ export default function BrandMenu(){
                                         margin:'.5rem 0',
                                         
                                     }}
-                                    onClick={event =>  window.location.href='/StockList'}>
+                                    onClick={event =>  window.location.href='/products'}>
                                     LISTADO DE STOCK
                                 </Button>
 
@@ -71,7 +71,7 @@ export default function BrandMenu(){
                                         display:'block',
                                         margin:'.5rem 0',
                                     }}
-                                    onClick={event =>  window.location.href='/SalesList'}>
+                                    onClick={event =>  window.location.href='/sales'}>
                                     LISTADO DE VENTAS
                                 </Button>
                             </form>

@@ -1,18 +1,17 @@
 import {Button, Card, CardContent, Grid, TextField, Typography, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
-import {useState, useEffect} from "react"
+import {useState, useEffect} from "react";
+import { useParams } from "react-router-dom";
 
 export default function ProductForm(){
-    
+
     const[products, setProductTypes]= useState([])
+    const params = useParams()
+
     const loadProductTypes = async (e) =>{
         const response = await fetch('https://art-trash.herokuapp.com/product/types')
         const data = await response.json()
         setProductTypes(data)
     }
-
-    useEffect(() =>{
-        loadProductTypes()
-    }, [])
 
     const[product, setProduct]= useState({
         brand_id: sessionStorage.getItem('brand_id'),
@@ -29,28 +28,46 @@ export default function ProductForm(){
         quantity: ''
     })
 
+    const [editing, setEditing] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch('https://art-trash.herokuapp.com/products', {
+        
+        if (editing){
+
+            const resProduct = await fetch(`http://localhost:4000/products/${params.id}`, {
+            method:'PUT',
+            body: JSON.stringify(product),
+            headers:{"Content-Type": "application/json"},
+            });
+            const productData= await resProduct.json();
+
+            const resStock = await fetch(`http://localhost:4000/stock/${params.id}`, {
+                method:'PUT',
+                body: JSON.stringify(stock),
+                headers:{"Content-Type": "application/json"},
+            });
+            const stockData = await resStock.json();
+
+
+        }else{
+            const resProduct = await fetch('https://art-trash.herokuapp.com/products', {
             method:'POST',
             body: JSON.stringify(product),
             headers:{"Content-Type": "application/json"},
-        });
-        const data = await res.json();
+            });
+            const productData= await resProduct.json();
 
-        console.log(data);
+            var product_id = productData.body.product.id;
+            stock.product_id = product_id;
 
-        var product_id = data.body.product.id;
-        stock.product_id = product_id;
-
-        const res1 = await fetch('https://art-trash.herokuapp.com/stock', {
-            method:'POST',
-            body: JSON.stringify(stock),
-            headers:{"Content-Type": "application/json"},
-        });
-        const data1 = await res1.json();
-
-        console.log(data1);
+            const resStock = await fetch('https://art-trash.herokuapp.com/stock', {
+                method:'POST',
+                body: JSON.stringify(stock),
+                headers:{"Content-Type": "application/json"},
+            });
+            const stockData = await resStock.json();
+        }
     };
 
     const handleChange = (e) =>
@@ -58,6 +75,22 @@ export default function ProductForm(){
     
     const handleChangeQuantity = (e) =>
         setStock({...stock,[e.target.name]: e.target.value});
+
+    const loadProduct = async (id) => {
+        const res = await fetch(`https://art-trash.herokuapp.com/products/data/${id}`)
+        const data = await res.json()
+        console.log(data)
+        setProduct({description: data[0].description, serial_number: data[0].serial_number, product_type_id: data[0].product_type_id, price: data[0].price, brand_id: data[0].brand_id})
+        setStock({quantity: data[0].quantity, product_id: params.id})
+        setEditing(true)
+    };
+
+    useEffect(() =>{
+        loadProductTypes();
+        if(params.id){
+            loadProduct(params.id);
+        }
+    }, [params.id])
 
     return(
 
@@ -86,6 +119,7 @@ export default function ProductForm(){
                                         margin:'.5rem 0'
                                     }}
                                     name="description"
+                                    value={product.description}
                                     onChange={handleChange}
                                     inputProps={{style: {color: "white"}}}
                                     InputLabelProps={{style: {color: "white"}}}
@@ -99,6 +133,7 @@ export default function ProductForm(){
                                         margin:'.5rem 0'
                                     }}
                                     name="serial_number"
+                                    value={product.serial_number}
                                     onChange={handleChange}
                                     inputProps={{style: {color: "white"}}}
                                     InputLabelProps={{style: {color: "white"}}}
@@ -113,6 +148,7 @@ export default function ProductForm(){
                                     InputLabelProps={{style: {color: "white"}}}
                                     onChange={handleChange}
                                     fullWidth
+                                    value={product.product_type_id}
                                 >
                                 {products.map(productType =>(
                                             
@@ -128,6 +164,7 @@ export default function ProductForm(){
                                         margin:'.5rem 0'
                                     }}
                                     name="price"
+                                    value={product.price}
                                     onChange={handleChange}
                                     inputProps={{style: {color: "white"}}}
                                     InputLabelProps={{style: {color: "white"}}}
@@ -141,6 +178,7 @@ export default function ProductForm(){
                                         margin:'.5rem 0'
                                     }}
                                     name="quantity"
+                                    value={stock.quantity}
                                     onChange={handleChangeQuantity}
                                     inputProps={{style: {color: "white"}}}
                                     InputLabelProps={{style: {color: "white"}}}

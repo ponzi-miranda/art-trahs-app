@@ -23,7 +23,7 @@ export default function App(){
         <Route path='/BrandMenu' element={<BrandMenu/>}/>
         <Route path='/NewSale' element={<SaleForm/>}/>
         <Route path='/SalesList' element={<SalesList/>}/>
-        <Route path='/EditProduct' elemnt={<EditProduct/>}/>
+        <Route path='/EditProduct/:id' element={<EditProduct/>}/>
       </Routes>  
       </Container>
     </BrowserRouter>

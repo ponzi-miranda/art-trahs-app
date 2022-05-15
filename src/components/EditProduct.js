@@ -1,25 +1,48 @@
 import {Button, Card, CardContent, Grid, TextField, Typography, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
 import {useState, useEffect} from "react"
 import {useSearchParams} from "react-router-dom"
+import { useParams } from "react-router";
 
 export default function ProductForm(){
     
-    const[params, setParams] = useSearchParams();
+    let { id } = useParams();
 
+    console.log(id);
 
     const[products, setProductTypes]= useState([])
+    const[productData, setProductData]= useState([])
+
+
     const loadProductTypes = async (e) =>{
         const response = await fetch('https://art-trash.herokuapp.com/product/types')
         const data = await response.json()
         setProductTypes(data)
     }
 
-    useEffect(() =>{
-        loadProductTypes()
-    }, [])
+    const loadProductData = async (e) =>{
+        const response = await fetch('https://art-trash.herokuapp.com/products/data/' + id)
+        const data = await response.json()
+        setProductData(data)
+
+        console.log(data)
+    }
+
+    useEffect(() => {
+        loadProductData();
+        loadProductTypes();
+    },[]);
+
+    
+    // 
+    //     brand_id: '',
+    //     serial_number: '',
+    //     description: '',
+    //     product_type_id:'',
+    //     price:''
+    // })
 
     const[product, setProduct]= useState({
-        brand_id: sessionStorage.getItem('brand_id'),
+        brand_id: '',
         serial_number: '',
         description: '',
         product_type_id:'',
@@ -27,7 +50,6 @@ export default function ProductForm(){
     })
 
     const[stock, setStock] = useState({
-        
         brand_id: sessionStorage.getItem('brand_id'),
         product_id: '',
         quantity: ''
@@ -63,13 +85,23 @@ export default function ProductForm(){
     const handleChangeQuantity = (e) =>
         setStock({...stock,[e.target.name]: e.target.value});
 
+
+        // if(window.onload == true){
+        //     return(
+        //         <div>
+        //             cargadooooo
+        //         </div>
+        //     )
+        // }
     return(
+        
 
             <Grid 
             container 
             direction="column" 
             alignContent="center" 
             justifyContent="center">
+
                 <Grid item xs={3}>
                     <Card
                         sx={{mt : 5}} style={{
@@ -77,80 +109,65 @@ export default function ProductForm(){
                         padding:"5rem"
                     }}>
                         <Typography variant='5' textAlign='center' color='whitesmoke'>
-                                ALTA DE PRODUCTO
+                                EDITAR PRODUCTO
                         </Typography>
                         <CardContent>
                             <form onSubmit={handleSubmit}> 
-            
-                                <TextField
-                                    variant="outlined"
-                                    label="Nombre:"
-                                    sx={{
-                                        display:'block',
-                                        margin:'.5rem 0'
-                                    }}
-                                    name="description"
-                                    onChange={handleChange}
-                                    inputProps={{style: {color: "white"}}}
-                                    InputLabelProps={{style: {color: "white"}}}
-                                />
 
-                                <TextField
-                                    variant="outlined"
-                                    label="Código:"
-                                    sx={{
-                                        display:'block',
-                                        margin:'.5rem 0'
-                                    }}
-                                    name="serial_number"
-                                    onChange={handleChange}
-                                    inputProps={{style: {color: "white"}}}
-                                    InputLabelProps={{style: {color: "white"}}}
-                                />
-
-                                <InputLabel >Tipo:</InputLabel>
-                                <Select
-                                    variant="outlined"
-                                    label="Tipo:"
-                                    name="product_type_id"
-                                    inputProps={{style: {color: "white"}}}
-                                    InputLabelProps={{style: {color: "white"}}}
-                                    onChange={handleChange}
-                                    fullWidth
-                                >
-                                {products.map(productType =>(
-                                            
-                                    <MenuItem value={productType.id}>{productType.description}</MenuItem>
-                                ))}
-                                </Select>
-                                
-                                <TextField
-                                    variant="outlined"
-                                    label="Precio:"
-                                    sx={{
-                                        display:'block',
-                                        margin:'.5rem 0'
-                                    }}
-                                    name="price"
-                                    onChange={handleChange}
-                                    inputProps={{style: {color: "white"}}}
-                                    InputLabelProps={{style: {color: "white"}}}
-                                />
-
-                                <TextField
-                                    variant="outlined"
-                                    label="Cantidad:"
-                                    sx={{
-                                        display:'block',
-                                        margin:'.5rem 0'
-                                    }}
-                                    name="quantity"
-                                    onChange={handleChangeQuantity}
-                                    inputProps={{style: {color: "white"}}}
-                                    InputLabelProps={{style: {color: "white"}}}
-                                />
+                                    {productData.map(p =>(
+                                         <><><><TextField
+                                            variant="outlined"
+                                            label="Nombre:"
+                                            sx={{
+                                                display: 'block',
+                                                margin: '.5rem 0'
+                                            }}
+                                            name="description"
+                                            onChange={handleChange}
+                                            inputProps={{ style: { color: "white" } }}
+                                            InputLabelProps={{ style: { color: "white" } }}
+                                            value={p.description} /></><><InputLabel>Tipo:</InputLabel><Select
+                                                variant="outlined"
+                                                label="Tipo:"
+                                                name="product_type_id"
+                                                inputProps={{ style: { color: "white" } }}
+                                                InputLabelProps={{ style: { color: "white" } }}
+                                                onChange={handleChange}
+                                                fullWidth
+                                                value={p.product_type_id}
+                                            >
+                                                {products.map(productType => (
+                                                    <MenuItem value={productType.id}>{productType.description}</MenuItem>
+                                                ))}
+                                            </Select></></>
+                                            <TextField
+                                                variant="outlined"
+                                                label="Precio:"
+                                                sx={{
+                                                    display: 'block',
+                                                    margin: '.5rem 0'
+                                                }}
+                                                name="price"
+                                                onChange={handleChange}
+                                                inputProps={{ style: { color: "white" } }}
+                                                InputLabelProps={{ style: { color: "white" } }}
+                                                value={p.price} />
+                                                
+                                            <TextField
+                                                variant="outlined"
+                                                label="Cantidad:"
+                                                sx={{
+                                                    display: 'block',
+                                                    margin: '.5rem 0'
+                                                }}
+                                                name="quantity"
+                                                onChange={handleChangeQuantity}
+                                                inputProps={{ style: { color: "white" } }}
+                                                InputLabelProps={{ style: { color: "white" } }}
+                                                value={p.quantity} /></>
+                                            ))}
                                 <Button variant="outlined" color="inherit" type="submit">
-                                    Cargar Producto
+                                    Editar Producto
                                 </Button>
                             </form>
                         </CardContent>

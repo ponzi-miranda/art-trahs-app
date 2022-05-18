@@ -1,7 +1,9 @@
 import {Box, AppBar, Toolbar, Container, Button, Card, CardContent, Grid, TextField, Typography, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
 import {useState, useEffect} from "react"
 import { Link, useNavigate } from 'react-router-dom'
-export default function BrandMenu(){
+
+
+export default function EventMenu(){
     
     const navigate = useNavigate()
 
@@ -26,10 +28,9 @@ export default function BrandMenu(){
         }
     }, [])
 
-    if(user.roleid == 1){
+    if(user.roleid == 2){
         navigate("/");
     }
-
 
     return(
         <><Box sx={{ flexGrow: 1 }}>
@@ -37,11 +38,11 @@ export default function BrandMenu(){
                 <Container>
                     <Toolbar>
                         <Typography sx={{ flexGrow: 1 }}>
-                            <Link to="/menu">ART-TRASH</Link>
+                            <Link to="/home">ART-TRASH</Link>
                         </Typography>
 
                         <Button variant='contained' color='secondary' onClick={() => navigate("/")}>
-                            Cerrar Sesión
+                            Cerrar Sesion
                         </Button>
                     </Toolbar>
                 </Container>
@@ -65,24 +66,24 @@ export default function BrandMenu(){
                                     display: 'block',
                                     margin: '.5rem 0',
                                 }}
-                                    onClick={() => navigate('/product/new')}>
-                                    ALTA PRODUCTOS
+                                    onClick={() => navigate('/event/new')}>
+                                    NUEVA TIENDA
                                 </Button>
 
                                 <Button variant="outlined"  size="large" color="inherit" type="submit" sx={{
                                     display: 'block',
                                     margin: '.5rem 0',
                                 }}
-                                    onClick={() => navigate('/products')}>
-                                    LISTADO DE STOCK
+                                    onClick={() => navigate('/events')}>
+                                    LISTADO DE TIENDAS
                                 </Button>
 
                                 <Button variant="outlined" size="large" color="inherit" type="submit" sx={{
                                     display: 'block',
                                     margin: '.5rem 0',
                                 }}
-                                    onClick={() => navigate('/sales')}>
-                                    LISTADO DE VENTAS
+                                    onClick={() => navigate('/event/current')}>
+                                    EVENTO ACTUAL
                                 </Button>
                             </form>
                         </CardContent>

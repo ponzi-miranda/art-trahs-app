@@ -13,6 +13,11 @@ export default function ProductForm(){
         setProductTypes(data)
     }
 
+    const[labels, setLabel]= useState({
+        title: 'ALTA DE PRODUCTO',
+        button: 'CARGAR PRODUCTO'
+    })
+
     const[product, setProduct]= useState({
         brand_id: sessionStorage.getItem('brand_id'),
         serial_number: '',
@@ -35,14 +40,14 @@ export default function ProductForm(){
         
         if (editing){
 
-            const resProduct = await fetch(`http://localhost:4000/products/${params.id}`, {
+            const resProduct = await fetch(`https://art-trash.herokuapp.com/products/${params.id}`, {
             method:'PUT',
             body: JSON.stringify(product),
             headers:{"Content-Type": "application/json"},
             });
             const productData= await resProduct.json();
 
-            const resStock = await fetch(`http://localhost:4000/stock/${params.id}`, {
+            const resStock = await fetch(`https://art-trash.herokuapp.com/stock/${params.id}`, {
                 method:'PUT',
                 body: JSON.stringify(stock),
                 headers:{"Content-Type": "application/json"},
@@ -82,6 +87,7 @@ export default function ProductForm(){
         console.log(data)
         setProduct({description: data[0].description, serial_number: data[0].serial_number, product_type_id: data[0].product_type_id, price: data[0].price, brand_id: data[0].brand_id})
         setStock({quantity: data[0].quantity, product_id: params.id})
+        setLabel({title: 'EDITAR PRODUCTO', button:'EDITAR PRODUCTO'})
         setEditing(true)
     };
 
@@ -106,7 +112,7 @@ export default function ProductForm(){
                         padding:"5rem"
                     }}>
                         <Typography variant='5' textAlign='center' color='whitesmoke'>
-                                ALTA DE PRODUCTO
+                            {labels.title}
                         </Typography>
                         <CardContent>
                             <form onSubmit={handleSubmit}> 
@@ -184,7 +190,7 @@ export default function ProductForm(){
                                     InputLabelProps={{style: {color: "white"}}}
                                 />
                                 <Button variant="outlined" color="inherit" type="submit">
-                                    Cargar Producto
+                                    {labels.button}
                                 </Button>
                             </form>
                         </CardContent>

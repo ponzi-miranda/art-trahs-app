@@ -1,13 +1,28 @@
 import {Button, Card, CardContent, Grid, TextField, Typography} from "@mui/material";
-import {useState, useEffect} from "react"
+import {useState} from "react"
+import { useNavigate } from 'react-router-dom'
 
 export default function UsersForm(){
-    
+    const navigate = useNavigate()
+ 
+
     const[user, loginUser]= useState({
         email:'',
-        password:''
+        password:'',
+        roleid:''
     })
     
+    const loadUser = async (id) => {
+        const res = await fetch(`http://localhost:4000/users/${id}`)
+        const data = await res.json()
+        if(data[0].roleid==1){
+            navigate("/home")
+        }else{
+            navigate("/menu")
+        }
+
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const res = await fetch('https://art-trash.herokuapp.com/login', {
@@ -21,9 +36,12 @@ export default function UsersForm(){
         sessionStorage.setItem('brand_id', data);
 
         if(sessionStorage.getItem('brand_id') != 'Error'){
-            window.location.href='/BrandMenu';
+            
+            loadUser(sessionStorage.getItem('brand_id'));
         }
     };
+
+  
 
     const handleChange = (e) =>
         loginUser({...user,[e.target.name]: e.target.value});
